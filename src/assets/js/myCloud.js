@@ -1,10 +1,8 @@
 // var d3 = require("d3"),
 import * as d3 from 'd3'
 import cloud from './d3.layout.cloud.js'
-//  import * as d3 from 'd3'
-//     var cloud = require('./d3.layout.cloud.js').default();
 
-export default function () {
+export default function (callback) {
 
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
         width = 350 - margin.left - margin.right,
@@ -26,10 +24,6 @@ export default function () {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("class", "wordcloud")
-        // .attr("transform",
-        //     "translate(" + margin.left + "," + margin.top + ")");
-        // .style("width", "50%")
-        // .style("height", height)
         .attr("transform", "translate(" + margin.left * 7 + "," + margin.top * 7+ ")");
 
     d3.csv("topicData.csv").then(function(data) {
@@ -60,7 +54,8 @@ export default function () {
                 // appear outside of the SVG area
                 .selectAll("text")
                 .data(words)
-                .enter().append("text")
+                .enter()
+                .append("text")
                 .style("font-size", function (d) {
                     return d.size/2 + 5 + "px";
                 })
@@ -72,8 +67,30 @@ export default function () {
                 })
                 .text(function (d) {
                     return d.text;
+                })
+                .on("click", function (d) {
+                    // callback(d);
+                    // // console.log(d);
+                    // this.axios.get('10.21.91.207:8080/exer/lecture').then((response)=>{
+                    //     console.log(response.data);//成功回调
+                    // },(response)=>{
+                    //     //失败回调
+                    //     console.log("fail");
+                    //     console.log(response);
+                    //
+                    // })
+                    // d.style("fill","red");
                 });
         }
+
+        function callback(d){
+            // d.style("color","red");
+            console.log(d);
+            // d.text="www";
+        }
+
+
+
     })
 }
 

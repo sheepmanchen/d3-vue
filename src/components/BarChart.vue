@@ -13,16 +13,16 @@
             this.testDraw();
         },
         created() {
-            // this.getlinear();
+
         },
         methods: {
              testDraw(){
-                 var margin = {top:50, right: 50, bottom: 50, left:150};
+                 var margin = {top:20, right: 50, bottom: 50, left:150};
                  // var width = parseInt(d3.select('body').style('width'), 10) - margin.left - margin.right;
                  var width = 600 - margin.left - margin.right;
                  // var height = parseInt(d3.select('body').style('height'), 10) - margin.top - margin.bottom;
-                 var height = 300 - margin.top - margin.bottom;
-                 let buttonYears = [2015, 2016, 2017, 2018];
+                 var height = 400 - margin.top - margin.bottom;
+                 let buttonYears = [2015, 2016, 2017, 2018, 2019];
 
                  // var div = d3.select("body").append("div").attr("class", "toolTip");
 
@@ -38,10 +38,11 @@
 
                  var div = svg.append("div").attr("class","toolTip");
 
+                 var play_button_clicked=false;
                  svg =  svg.append("svg")
                      .attr("width", width + margin.left + margin.right)
-                     .attr("height", height + margin.bottom + margin.top)
-                     .append("g")
+                     .attr("height", height + margin.bottom + margin.top);
+                     svg = svg.append("g")
                      .attr("transform","translate(" + margin.left +","+margin.top+")");
 
                  // var form = d3.select("#myform").style("transform","translate(150px, 30px)");
@@ -51,12 +52,12 @@
                      .attr("class", "play-button button")
                      .style("transform","translate(10px,10px)")
                      .text("PLAY!")
-                     .style("transform","translate(" + 20 +"px ,"+ 20 +"px)");
+                     .style("transform","translate(" + 40 +"px ,"+ -10 +"px)");
 
                  let buttonContainer = d3.select(".outbox").append("div").attr("class", "container")
                      .style("width", "500px")
                      .style("height", "50px")
-                     .style("transform","translate(" + 10 +"px ,"+ 10 +"px)");
+                     .style("transform","translate(" + 20 +"px ,"+ -20 +"px)");
 
 
                  let buttons = buttonContainer.selectAll("div")
@@ -76,32 +77,35 @@
 
                  var playInterval;
                  buttons.on("click", function(d){
-                     // d3.select(".selected").classed("selected",false);
-                     // d3.select(this).classed("selected", true);
                      clearInterval(playInterval);
                      year = d;
                      update(year);
-                     // changeYear();
                  });
 
                  playButton.on("click", function(){
                      var i = 0;
-                     playInterval = setInterval(function(){
-                         update(buttonYears[i]);
-                         console.log(buttonYears[i]);
-                         i++;
-                         if(i>buttonYears.length-1){
-                             clearInterval(playInterval);
-                         }
-                     }, 1000);
+                     if (play_button_clicked===false){
+
+                         play_button_clicked=true;
+
+                         playInterval = setInterval(function(){
+                             update(buttonYears[i]);
+                             console.log(buttonYears[i]);
+                             i++;
+                             if(i>buttonYears.length-1){
+                                 clearInterval(playInterval);
+                             }
+                         }, 1000);
+
+                         play_button_clicked=false;
+                     }
                  });
 
 
                  var xScale = d3.scaleLinear().range([0,width]);
                  var yScale = d3.scaleBand().range([0, height]).padding(0.2);
 
-                 // d3.select("input[value=\"2016\"]").property("checked", true);
-                 changeYear();
+                 // changeYear();
 
                  function update(updateYear){
 
@@ -115,43 +119,47 @@
 
                  }
 
+                 var dpt_data = [] ;
+                d3.csv("department_change.csv").then(function(data){
+                     // dpt_data.push(data);
+                    data.forEach(function (d) {
+                        dpt_data.push(d);
+                    });
+                    // dpt_data = data;
+                    changeYear();
+                 });
+                 // console.log(dpt_data);
+
+                 changeYear();
                  function changeYear() {
                      // var bar = svg.selectAll(".bar");
                      // bar.remove();
                      // svg.remove()
 
                      let dataSet;
-                     d3.csv("department_change.csv").then(function (data) {
+                     // d3.csv("department_change.csv").then(function (data) {
                          //
-                         console.log(data);
-                         dataSet = data.filter(function (e) {
+                         // console.log(dpt_data);
+                         dataSet = dpt_data.filter(function (e) {
                              return parseInt(e.year) == parseInt(year);
                          });
+
                          // fDta=data.filter(function(e){return e.dpt==="Mathematics"});
                          console.log(dataSet);
                          dataSet.sort(function (x, y) {
                              return d3.ascending(parseInt(y.totalNum), parseInt(x.totalNum));
                          });
-                         // dataSet.forEach(function (d) {
-                             // d.deparment = d.department;
-                             //  d.totalNum = parseInt(d.totoalNum);
-                             //     const xValue = parseInt(d.tv);
-                             //     const yValue = d.dpt;
-                         // });
 
                          const xValue = dataSet => parseInt(dataSet.totalNum);
                          const yValue = dataSet => dataSet.department;
 
-                         xScale.domain([0, d3.max(dataSet, xValue)]);
+                         xScale.domain([0, d3.max(dataSet, xValue)+10]);
+                         // xScale.domain([0, 130]);
                          yScale.domain(dataSet.map(yValue));
 
 
                          svg.select(".y.axis").remove();
                          svg.select(".x.axis").remove();
-                         // svg.selectAll(".temp-g").remove();
-                         // svg.select(".temp-svg").remove();
-                         // svg.selectAll(".text-g").remove();
-                         // svg.selectAll(".bar").remove();
 
                          svg.selectAll(".text-value").remove();
 
@@ -180,11 +188,7 @@
 
                          var bars = svg.selectAll(".bar").data(dataSet);
                          bars = bars.enter().append("g").attr("class", "temp-g");
-                         // bars.exit()
-                         //     .remove();
 
-
-                         // bars = svg.selectAll(".bar");
                          bars.append("rect")
                              .attr("class", "bar")
                              // .enter()
@@ -202,15 +206,16 @@
                              .duration(500)
                              .ease(d3.easeLinear)
                              .attr("class", "text-value")
-                             .attr("x", d => xScale(xValue(d)) - 15)
-                             .attr("y", d => yScale(yValue(d)) + 5)
+                             .attr("x", d => xScale(xValue(d)) - 3)
+                             .attr("y", d => yScale(yValue(d)) + 3)
                              .attr("dy", "1em")
                              .attr("text-anchor", "middle")
-                             .attr("font-size", "14px")
-                             .attr("fill", "lightyellow")
+                             .attr("font-size", "11px")
+                             .attr("fill", "#555")
                              .attr("opacity", '0')
                              // .attr("transform", function(d) { return "translate(20, -20)"; })
                              .text(function (d) {
+                                 if(d.totalNum!=0)
                                  return d.totalNum;
                              });
 
@@ -233,7 +238,7 @@
                          bars = svg.selectAll(".bar");
                          // updated data:
                          bars.transition()
-                             .duration(750)
+                             .duration(1000)
                              .ease(d3.easeLinear)
                              .attr("y", d => yScale(yValue(d)))
                              .attr("x", 0)
@@ -241,7 +246,7 @@
                              .attr("height", yScale.bandwidth());
 
 
-                     })
+                     // })
                  }
 
             },
@@ -265,8 +270,8 @@
         position: relative;
     }
     svg {
-        width: 100%;
-        height: 100%;
+        /*width: 100%;*/
+        /*height: 100%;*/
         position: center;
     }
 
@@ -322,7 +327,8 @@
     /*}*/
 
     .axis text {
-        font: 14px sans-serif;
+        font: 12px sans-serif;
+        font-weight: bold;
     }
 
     .axis path{
@@ -365,15 +371,15 @@
         overflow-x:hidden;
         overflow-y:hidden;
     }
-    .myButton{
-        float: left;
-        margin-left: 30px;
-        font-size: 14px;
-        height: 30px;
-        font-weight: lighter;
-        cursor: pointer;
+    /*.myButton{*/
+        /*float: left;*/
+        /*margin-left: 30px;*/
+        /*font-size: 14px;*/
+        /*height: 30px;*/
+        /*font-weight: lighter;*/
+        /*cursor: pointer;*/
 
-    }
+    /*}*/
 
     .play-button {
     position: absolute;
@@ -394,15 +400,61 @@
     /*height: 30px;*/
     }
 
-    /*.selected{*/
-        /*background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #80b5ea), color-stop(1, #bddbfa));*/
-        /*background:-moz-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);*/
-        /*background:-webkit-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);*/
-        /*background:-o-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);*/
-        /*background:-ms-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);*/
-        /*background:linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);*/
-        /*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#80b5ea', endColorstr='#bddbfa',GradientType=0);*/
-        /*background-color:#80b5ea;    }*/
+    .myButton {
+        float: left;
+        margin-left: 30px;
+        height: 20px;
+        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+        background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
+        background-color:#ffffff;
+        -moz-border-radius:4px;
+        -webkit-border-radius:4px;
+        border-radius:4px;
+        border:1px solid #dcdcdc;
+        display:inline-block;
+        cursor:pointer;
+        color:#666666;
+        /*font-family:Arial;*/
+        font-size:11px;
+        font-weight:bold;
+        padding:0px 10px;
+        text-decoration:none;
+        text-align: center;
+        text-align-all: center;
+        /*text-shadow:0px 1px 0px #ffffff;*/
+    }
+    .myButton:hover {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+        background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
+        background-color:#f6f6f6;
+    }
+    .myButton:active {
+        position:relative;
+        top:1px;
+    }
+    .selected{
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #80b5ea), color-stop(1, #bddbfa));
+        background:-moz-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);
+        background:-webkit-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);
+        background:-o-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);
+        background:-ms-linear-gradient(top, #80b5ea 5%, #bddbfa 100%);
+        background:linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#80b5ea', endColorstr='#bddbfa',GradientType=0);
+        background-color:#80b5ea;
+    }
     /*form {*/
     /*transform: translate(150px, 150px);*/
     /*}*/

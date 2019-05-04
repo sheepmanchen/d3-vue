@@ -11,10 +11,12 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 import BarChart from './components/BarChart.vue';
 import WordCloud from './components/WordCloud';
-import * as d3 from 'd3';
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios,axios);
 
 export default {
   name: 'app',
@@ -27,6 +29,16 @@ export default {
     return{
 
     }
+  },
+  mounted() {
+    axios.get('HTTP://10.21.91.207:8080/exer/lecture').then((response)=>{
+      console.log(response.data);//成功回调
+    },(response)=>{
+      //失败回调
+      console.log("fail");
+      console.log(response);
+
+    });
   }
 }
 </script>
