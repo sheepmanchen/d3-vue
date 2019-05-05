@@ -7,28 +7,19 @@
 
 
 <script>
-
     // import * as d3 from "d3";
     import myCloud from '../assets/js/myCloud.js';
     export default {
         name: "WordCloud",
-        created() {
-            // this.getlinear();
-        },
         methods: {
             // //生成词云
             getWordCloud() {
                 myCloud();
             }
         },
-
         mounted() {
-
             this.getWordCloud();
-            console.log("wwwww111");
-
         }
-
     }
 </script>
 

@@ -3,16 +3,17 @@
     <div>
       <bar-chart></bar-chart>
       <word-cloud></word-cloud>
+      <search-bar></search-bar>
     </div>
     <!--<img alt="Vue logo" src="./assets/logo.png">-->
     <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
-    <div class="row"></div>
   </div>
 </template>
 
 <script>
-import BarChart from './components/BarChart.vue';
+import BarChart from './components/BarChart';
 import WordCloud from './components/WordCloud';
+import SearchBar from "./components/SearchBar";
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -23,12 +24,8 @@ export default {
   components: {
     // "HelloWorld": HelloWorld
     "bar-chart": BarChart,
+    "search-bar":SearchBar,
     "word-cloud": WordCloud
-  },
-  data(){
-    return{
-
-    }
   },
   mounted() {
     axios.get('HTTP://10.21.91.207:8080/exer/lecture').then((response)=>{
@@ -51,5 +48,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#search {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  color: #2c3e50;
+  position: absolute;
+  z-index: auto;
+  top: auto;
+  display: inline;
 }
 </style>
