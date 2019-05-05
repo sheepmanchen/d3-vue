@@ -12,23 +12,35 @@
     import myCloud from '../assets/js/myCloud.js';
     export default {
         name: "WordCloud",
+        props: ['cloud_year'],
         created() {
             // this.getlinear();
         },
         methods: {
             // //生成词云
-            getWordCloud() {
-                myCloud();
+            getWordCloud(c_year) {
+                console.log("inwordcloud"+c_year);
+                // myCloud 这个方法设置两个参数 一个year, 一个callback函数写在这里的methods里面？
+                myCloud(c_year);
             }
         },
 
         mounted() {
+            // console.log("inwordcloud"+this.cloud_year);
+            this.getWordCloud(this.cloud_year);
 
-            this.getWordCloud();
-            console.log("wwwww111");
+        },
 
+        watch: {
+            cloud_year:{
+                handler: function(){
+                    console.log("wwwww111");
+                    console.log("in watch"+this.cloud_year);
+                    this.getWordCloud(this.cloud_year);
+                },
+                deep: true
+            }
         }
-
     }
 </script>
 

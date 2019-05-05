@@ -1,14 +1,25 @@
 <template>
     <div id="mydiv">
-
+        <div id="bar-chart"></div>
+        <word-cloud :cloud_year="cloud_year" id="my-cloud"></word-cloud>
     </div>
 </template>
 
 
 <script>
     import * as d3 from "d3";
+    import WordCloud from './WordCloud';
 
     export default {
+        components: {
+            'word-cloud': WordCloud
+        },
+        data(){
+          var select_year = 2015;
+          return {
+              cloud_year: select_year
+          }
+        },
         mounted() {
             this.testDraw();
         },
@@ -26,7 +37,7 @@
 
                  // var div = d3.select("body").append("div").attr("class", "toolTip");
 
-                 var svg = d3.select("body")
+                 var svg = d3.select("body").select("#bar-chart")
                      .append("div")
                      .attr("class","outbox")
                      .style("float", "left")
@@ -46,7 +57,7 @@
                      .attr("transform","translate(" + margin.left +","+margin.top+")");
 
                  // var form = d3.select("#myform").style("transform","translate(150px, 30px)");
-                 let year = 2015;
+                 this.cloud_year = 2015;
 
                  let playButton = d3.select(".outbox").append("div")
                      .attr("class", "play-button button")
@@ -66,7 +77,7 @@
                      .append("div")
                      .text(function(d){return d;})
                      .attr("class", function(d){
-                         if(d===year){
+                         if(d===this.cloud_year){
                              return "myButton selected";
                          }
                          else{
@@ -78,9 +89,10 @@
                  var playInterval;
                  buttons.on("click", function(d){
                      clearInterval(playInterval);
-                     year = d;
-                     update(year);
+                     this.cloud_year = d;
+                     update(this.cloud_year);
                  });
+
 
                  playButton.on("click", function(){
                      var i = 0;
@@ -88,25 +100,29 @@
 
                          play_button_clicked=true;
 
-                         playInterval = setInterval(function(){
-                             update(buttonYears[i]);
-                             console.log(buttonYears[i]);
-                             i++;
-                             if(i>buttonYears.length-1){
-                                 clearInterval(playInterval);
-                             }
-                         }, 1000);
+                         clickPlay();
 
                          play_button_clicked=false;
+
                      }
                  });
 
+                function clickPlay(){
+                    var i = 0;
+                    playInterval = setInterval(function(){
+                        update(buttonYears[i]);
+                        console.log(buttonYears[i]);
+                        i++;
+                        if(i>buttonYears.length-1){
+                            clearInterval(playInterval);
+                        }
+                    }, 1000);
 
+                }
                  var xScale = d3.scaleLinear().range([0,width]);
                  var yScale = d3.scaleBand().range([0, height]).padding(0.2);
 
-                 // changeYear();
-
+                const self = this;
                  function update(updateYear){
 
                      d3.select(".selected").classed("selected", false);
@@ -114,34 +130,41 @@
                          return d==updateYear;
                      }).classed("selected", true);
 
-                     year = updateYear;
-                     changeYear();
+                     self.cloud_year = updateYear;
+                     changeYear(self.cloud_year);
 
                  }
 
                  var dpt_data = [] ;
-                d3.csv("department_change.csv").then(function(data){
+
+                 let temp_year = parseInt(this.cloud_year.toString());
+
+                 d3.csv("department_change.csv").then(function(data){
                      // dpt_data.push(data);
                     data.forEach(function (d) {
                         dpt_data.push(d);
                     });
                     // dpt_data = data;
-                    changeYear();
+                    changeYear(temp_year);
                  });
-                 // console.log(dpt_data);
+                 //
 
-                 changeYear();
-                 function changeYear() {
+                 // changeYear(this.cloud_year);
+                 update(this.cloud_year);
+                 function changeYear(cur_year) {
                      // var bar = svg.selectAll(".bar");
                      // bar.remove();
                      // svg.remove()
+                     console.log(cur_year);
+                     // console.log(typeof (this.cloud_year));
 
                      let dataSet;
                      // d3.csv("department_change.csv").then(function (data) {
                          //
                          // console.log(dpt_data);
                          dataSet = dpt_data.filter(function (e) {
-                             return parseInt(e.year) == parseInt(year);
+                             let b = cur_year === parseInt(e.year);
+                             return b;
                          });
 
                          // fDta=data.filter(function(e){return e.dpt==="Mathematics"});
@@ -187,7 +210,8 @@
 
 
                          var bars = svg.selectAll(".bar").data(dataSet);
-                         bars = bars.enter().append("g").attr("class", "temp-g");
+                         bars = bars.enter().append("g").attr("class", "temp-g")
+                         ;
 
                          bars.append("rect")
                              .attr("class", "bar")

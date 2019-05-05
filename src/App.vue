@@ -1,18 +1,32 @@
 <template>
   <div id="app">
-    <div>
-      <bar-chart></bar-chart>
-      <word-cloud></word-cloud>
-    </div>
+      <!--<word-cloud></word-cloud>-->
     <!--<img alt="Vue logo" src="./assets/logo.png">-->
     <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
-    <div class="row"></div>
+    <div class="row">
+      <chart-container
+        id="chart-container"
+        style="width: 100%"
+      ></chart-container>
+      <!--<div id="wordCloud"></div>-->
+      <!--<form-container-->
+        <!--id="form-container"-->
+        <!--style="width: 100%"-->
+      <!--&gt;</form-container>-->
+      <search-bar
+        id="search-bar"
+        style="transform: translate(30px,10px)"
+      ></search-bar>
+
+    </div>
   </div>
 </template>
 
 <script>
 import BarChart from './components/BarChart.vue';
-import WordCloud from './components/WordCloud';
+// import WordCloud from './components/WordCloud';
+import SearchBar from "./components/SearchBar";
+
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -22,8 +36,9 @@ export default {
   name: 'app',
   components: {
     // "HelloWorld": HelloWorld
-    "bar-chart": BarChart,
-    "word-cloud": WordCloud
+    "chart-container": BarChart,
+    "search-bar":SearchBar,
+    // "word-cloud": WordCloud
   },
   data(){
     return{
