@@ -204,8 +204,8 @@
                          svg.selectAll(".y.axis")
                              .call(d3.axisLeft(yScale))
                              .attr("opacity", '0')
-                             .transition()
-                             .duration(100)
+                             // .transition()
+                             // .duration(100)
                              .attr("opacity", '1');
 
 
