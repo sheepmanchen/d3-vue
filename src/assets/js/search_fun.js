@@ -57,34 +57,25 @@ let articles = [
         }
         ];
 
-export default function search (word) {
+export default function search (word='None', year='None') {
     let articles_array = articles,
         searchString = word;
+    if (year === "None")
+        year = '';
 
-    if (!searchString) {
+    if (!searchString && !year) {
         return articles_array;
     }
 
     searchString = searchString.trim().toLowerCase();
 
     articles_array = articles_array.filter(function (item) {
-        if (item.title.toLowerCase().indexOf(searchString) !== -1) {
-            return item;
-        }
-        else
-        if (item.speaker.toLowerCase().indexOf(searchString) !== -1) {
-            return item;
-        }
-        else
-        if (item.time.toLowerCase().indexOf(searchString) !== -1) {
-            return item;
-        }
-        else
-        if (item.department.toLowerCase().indexOf(searchString) !== -1) {
-            return item;
-        }
-        else
-        if (item.place.toLowerCase().indexOf(searchString) !== -1) {
+        if ((item.title.toLowerCase().indexOf(searchString) !== -1 ||
+            item.speaker.toLowerCase().indexOf(searchString) !== -1 ||
+            item.time.toLowerCase().indexOf(searchString) !== -1 ||
+            item.department.toLowerCase().indexOf(searchString) !== -1 ||
+            item.place.toLowerCase().indexOf(searchString) !== -1 || !searchString) &&
+            (!year || item.time.toLowerCase().indexOf(year) !== -1)) {
             return item;
         }
     });
