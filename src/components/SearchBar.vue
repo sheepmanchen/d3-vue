@@ -39,15 +39,15 @@
 
 <script>
     import search from '../assets/js/search_fun';
+    import Bus from '../assets/js/Bus'
     export default {
         name: "SearchBar",
-        props: ['search_year'],
         methods: {
         },
         data() {
             return {
                 searchString: "",
-                year: this.search_year,
+                year: "",
                 years: [
                     '',
                     '2015',
@@ -60,9 +60,14 @@
         },
         computed: {
             // 计算数学，匹配搜索
-            filteredArticles: function (){
+            filteredArticles: function () {
                 return search(this.searchString, this.year);
             }
+        },
+        mounted() {
+            Bus.$on("select_year", year => {
+                this.year = year;
+            })
         }
     };
 </script>
