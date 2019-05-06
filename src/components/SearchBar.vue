@@ -33,110 +33,20 @@
 </template>
 
 <script>
+    import search from '../assets/js/search_fun'
     export default {
         name: "SearchBar",
         methods: {
         },
         data() {
             return {
-                searchString: "",
-
-                // 数据模型，实际环境可以根据 Ajax 来获取
-
-                articles: [
-                    {
-                        "id": 1,
-                        "title": 'Intelligent Software Engineering: Synergy between AI and Software Engineering',
-                        "url": 'http://cse.sustech.edu.cn/cn/lecture/view/id/487',
-                        "time": '2019-5-17',
-                        "department": 'CSE',
-                        "speaker": 'Tao XIE',
-                        "place": 'Conference room 1008 IPARK A7 Building'
-                    },
-                    {
-                        "id": 2,
-                        "title": 'Challenges in applying Evolutionary Algorithms to real-world problems',
-                        "url": 'http://cse.sustech.edu.cn/cn/lecture/view/id/480',
-                        "time": '2019-4-22',
-                        "department": 'CSE',
-                        "speaker": 'Xiaodong LI',
-                        "place": '南山智园A7栋1008室'
-                    },
-                    {
-                        "id": 3,
-                        "title": '安全数据分析：若干重大安全事件响应实例及其背后支撑系统',
-                        "url": 'http://cse.sustech.edu.cn/cn/lecture/view/id/484',
-                        "time": '2019-4-19',
-                        "department": 'CSE',
-                        "speaker": '李丰沛',
-                        "place": '第一教学楼107室'
-                    },
-                    {
-                        "id": 4,
-                        "title": 'Automated Multitask Learning via Learning to Multitask',
-                        "url": 'http://cse.sustech.edu.cn/cn/lecture/view/id/472',
-                        "time": '2019-4-17',
-                        "department": 'CSE',
-                        "speaker": 'Yu Zhang',
-                        "place": '南山智园A7栋1008室'
-                    },
-                    {
-                        "id": 5,
-                        "title": 'Adversarial Evolution and Deep Learning for Computational Creativity',
-                        "url": 'http://cse.sustech.edu.cn/cn/lecture/view/id/470',
-                        "time": '2019-4-15',
-                        "department": 'CSE',
-                        "speaker": 'Alan Blair',
-                        "place": '南山智园A7栋1008室'
-                    },
-                    {
-                        "id": 6,
-                        "title": 'Computing for Creativity: Speculation and Beyond',
-                        "url": 'http://cse.sustech.edu.cn/cn/lecture/view/id/474',
-                        "time": '2019-4-12',
-                        "department": 'CSE',
-                        "speaker": 'Hongji Yang ',
-                        "place": '南山智园A7栋1008室'
-                    }
-                ]
+                searchString: ""
             }
         },
         computed: {
             // 计算数学，匹配搜索
-            filteredArticles: function () {
-                let articles_array = this.articles,
-                    searchString = this.searchString;
-
-                if (!searchString) {
-                    return articles_array;
-                }
-
-                searchString = searchString.trim().toLowerCase();
-
-                articles_array = articles_array.filter(function (item) {
-                    if (item.title.toLowerCase().indexOf(searchString) !== -1) {
-                        return item;
-                    }
-                    else
-                    if (item.speaker.toLowerCase().indexOf(searchString) !== -1) {
-                        return item;
-                    }
-                    else
-                    if (item.time.toLowerCase().indexOf(searchString) !== -1) {
-                        return item;
-                    }
-                    else
-                    if (item.department.toLowerCase().indexOf(searchString) !== -1) {
-                        return item;
-                    }
-                    else
-                    if (item.place.toLowerCase().indexOf(searchString) !== -1) {
-                        return item;
-                    }
-                });
-
-                // 返回过来后的数组
-                return articles_array;
+            filteredArticles: function (){
+                return search(this.searchString);
             }
         }
     };
@@ -187,8 +97,7 @@
     }
 
     .bar input{
-        background:#fff no-repeat 13px 13px;
-        background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=);
+        background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=) no-repeat 13px 13px;
 
         border: none;
         width: 200%;
