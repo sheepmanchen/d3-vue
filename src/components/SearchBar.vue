@@ -25,11 +25,11 @@
                 </tr>
                 <!-- 循环输出数据 -->
                 <tr  v-for="article in filteredArticles" :key="article.id" :class="{'alt':article.id%2 !== 1}">
-                    <td><a :href="article.url" target="new_window"> {{article.title}}</a> </td>
+                    <td><a :href="article.link" target="new_window"> {{article.title}}</a> </td>
                     <td>{{article.speaker}}</td>
-                    <td> {{article.time}}</td>
+                    <td> {{article.lecture_date}}</td>
                     <td> {{article.department}}</td>
-                    <td> {{article.place}}</td>
+                    <td> {{article.venue}}</td>
                 </tr>
             </table>
         </ul>
@@ -68,7 +68,7 @@
             Bus.$on("select_year", year => {
                 this.year = year;
             })
-        }
+        },
     };
 </script>
 
@@ -167,6 +167,9 @@
         font-size:1em;
         border:1px solid #98bf21;
         padding:3px 7px 2px 7px;
+    }
+    a {
+        padding: 3px 7px 2px 7px;
     }
     th {
         font-size:1.1em;
