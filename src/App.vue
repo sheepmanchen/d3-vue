@@ -15,7 +15,7 @@
       <!--&gt;</form-container>-->
       <search-bar
         id="search-bar"
-        style="transform: translate(30px,10px)"
+        style="width: 100%"
       ></search-bar>
 
     </div>

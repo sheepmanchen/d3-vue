@@ -9,6 +9,7 @@
 <script>
     import * as d3 from "d3";
     import WordCloud from './WordCloud';
+    import Bus from "../assets/js/Bus"
 
     export default {
         components: {
@@ -132,7 +133,7 @@
 
                      self.cloud_year = updateYear;
                      changeYear(self.cloud_year);
-
+                     Bus.$emit("select_year", updateYear);
                  }
 
                  var dpt_data = [] ;
