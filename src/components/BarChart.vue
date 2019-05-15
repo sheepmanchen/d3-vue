@@ -112,7 +112,6 @@
                     var i = 0;
                     playInterval = setInterval(function(){
                         update(buttonYears[i]);
-                        console.log(buttonYears[i]);
                         i++;
                         if(i>buttonYears.length-1){
                             clearInterval(playInterval);
@@ -153,23 +152,14 @@
                  // changeYear(this.cloud_year);
                  update(this.cloud_year);
                  function changeYear(cur_year) {
-                     // var bar = svg.selectAll(".bar");
-                     // bar.remove();
-                     // svg.remove()
-                     console.log(cur_year);
-                     // console.log(typeof (this.cloud_year));
 
                      let dataSet;
-                     // d3.csv("department_change.csv").then(function (data) {
-                         //
-                         // console.log(dpt_data);
                          dataSet = dpt_data.filter(function (e) {
                              let b = cur_year === parseInt(e.year);
                              return b;
                          });
 
                          // fDta=data.filter(function(e){return e.dpt==="Mathematics"});
-                         console.log(dataSet);
                          dataSet.sort(function (x, y) {
                              return d3.ascending(parseInt(y.totalNum), parseInt(x.totalNum));
                          });

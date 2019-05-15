@@ -6,7 +6,6 @@ import cloud from './d3.layout.cloud.js'
 
 let lecture_data = [];
 d3.json('lecture.json').then(function(data){
-    console.log(data);
     data.forEach(function (d) {
         lecture_data.push(d);
     });
@@ -29,7 +28,6 @@ function filter_data_by_year (y){
         var str = y.toString();
         return e.lecture_date.match(str)!=null;
     });
-    console.log(dataSet);
     let map = {};
     dataSet.forEach(function(d){
         var temp_str = d.title.toString().split(" ");
@@ -59,7 +57,6 @@ function filter_data_by_year (y){
     items.sort(function(first, second){
         return second[1] - first[1];
     });
-    console.log(items.slice(0,items.length/13));
     let cut_items = items.slice(0, items.length/13);
 
     let filter_data = [];
@@ -84,23 +81,10 @@ function filter_data_by_year (y){
     var temp_arr = filter_data.map(function(d){
         return [d.size];
     });
-
-
-
-    console.log("temp arr: "+temp_arr);
-    // filter_data = filter_data.map(function(obj){
-
-        // return [obj[0]]
-    // });
-    // console.log("filter:"+filter_data);
-    filter_data.forEach(function (d) {
-        console.log("here words: "+d.text+ "---" +d.size);
-    });
     return filter_data;
 }
 
 export default function w(c_year) {
-    console.log("in myCloud.js"+c_year);
 
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
         width = 450 - margin.left - margin.right,
@@ -109,7 +93,6 @@ export default function w(c_year) {
     let frequency_list;
 
     frequency_list = filter_data_by_year(c_year);
-    // console.log("here"+typeof frequency_list);
     d3.select(".cloud-svg").remove();
     var svg = d3.select("body").select("#my-cloud")
         .append("div")
@@ -128,8 +111,6 @@ export default function w(c_year) {
         .attr("transform", "translate(" + margin.left * 6 + "," + margin.top * 8 + ")");
 
     d3.csv("topicData.csv").then(function(data) {
-        // frequency_list = data;
-        // console.log(typeof frequency_list);
 
         var color = d3.scaleLinear()
             .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
@@ -147,10 +128,6 @@ export default function w(c_year) {
         layout.start();
 
         function draw(words) {
-            // console.log("here words:"+words.text + words.size);
-            words.forEach(function (d) {
-               console.log("here words: "+d.text+ "---" +d.size);
-            });
             svg
                 .append("g")
                 // .attr("transform", "translate(200,100)")
@@ -190,7 +167,6 @@ export default function w(c_year) {
 
         function callback(d){
             // d.style("color","red");
-            console.log(d);
             // d.text="www";
         }
 

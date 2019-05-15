@@ -13,7 +13,8 @@
     "d3": "^5.9.2",
     "d3-dispatch": "^1.0.5",
     "vue": "^2.6.10",
-    "vue-axios": "^2.1.4"
+    "vue-axios": "^2.1.4",
+    "jquery": "^3.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.6.0",

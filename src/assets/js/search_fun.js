@@ -1,23 +1,19 @@
-import * as d3 from "d3"
+import * as jQuery from "jquery"
 
-    // 数据模型，实际环境可以根据 Ajax 来获取
+// 数据模型，实际环境可以根据 Ajax 来获取
 let articles = [];
-let flag = false;
-
-function initDate() {
-    d3.json('lecture.json').then(function(data){
-        console.log(data);
+jQuery.ajax({
+    dataType: "json",
+    url: "lecture.json",
+    async: false,
+    success: function (data){
         data.forEach(function (d) {
             articles.push(d);
         });
-        this.search("None", "None");
-    });
-    flag = true;
-}
+    }
+});
 
-export default function search (word='None', year='None') {
-    while (!flag)
-        initDate();
+function search (word='None', year='None') {
     let articles_array = articles,
         searchString = word;
     if (year === "None")
@@ -42,4 +38,7 @@ export default function search (word='None', year='None') {
 
     // 返回过来后的数组
     return articles_array;
+}
+export {
+    search,
 }
