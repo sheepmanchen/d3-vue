@@ -49,27 +49,22 @@
                 </table>
             </ul>
 
-            <span v-for="i in 10" :key="i">
-                <span v-if="i === 1" class="btn btn-default"
-                      v-on:click="setPage(1)" :class="{'disabled':fDisabled}">
-                    首页
+            <span class="btn btn-default" v-on:click="setPage(1)" :class="{'disabled':fDisabled}">
+                首页
+            </span>
+            <span class="btn btn-default" v-on:click="setPage(page-1)" :class="{'disabled':fDisabled}">
+                上一页
+            </span>
+            <span v-for="i in showPageNumber" :key="i">
+                <span class="btn btn-number" v-on:click="setPage(i)" :class="{'curPage': i === page}">
+                    {{i}}
                 </span>
-                <span v-if="i === 1" class="btn btn-default"
-                      v-on:click="setPage(page-1)" :class="{'disabled':fDisabled}">
-                    上一页
-                </span>
-                <span v-if="page - 6 + i > 0 &&page - 6 + i <= maxPage" class="btn btn-number"
-                      v-on:click="setPage(page-6+i)" :class="{'curPage': i === 6}">
-                    {{page-6+i}}
-                </span>
-                <span v-if="i === 10" class="btn btn-default"
-                      v-on:click="setPage(page+1)" :class="{'disabled':lDisabled}">
-                    下一页
-                </span>
-                <span v-if="i === 10 " class="btn btn-default"
-                      v-on:click="setPage(maxPage)" :class="{'disabled':lDisabled}">
-                    尾页
-                </span>
+            </span>
+            <span class="btn btn-default" v-on:click="setPage(page+1)" :class="{'disabled':lDisabled}">
+                下一页
+            </span>
+            <span class="btn btn-default" v-on:click="setPage(maxPage)" :class="{'disabled':lDisabled}">
+                尾页
             </span>
             <span>{{page}}/{{maxPage}}</span>
         </div>
@@ -114,6 +109,23 @@
                 if (this.flag)
                     return getPages(this.pageSize);
                 return 1
+            },
+            showPageNumber: function () {
+                let start = this.page - 5;
+                let shown = [];
+                if (start < 1)
+                    start = 1;
+                let end = start + 9;
+                if (end > this.maxPage)
+                    end = this.maxPage;
+                for (; start <= end; ++ start)
+                    shown.push(start);
+                return shown;
+            }
+        },
+        watch: {
+            pageSize() {
+                this.page = 1;
             }
         },
         mounted() {
@@ -218,13 +230,22 @@
         overflow: hidden;
     }
     .btn-default{
-        width: 50px;
+        width: 60px;
+        border: 1px solid #e1e2e3;
+        cursor: pointer;
+        display: inline-block;
+        margin: 3px;
     }
     .btn-number{
         width: 30px;
+        border: 1px solid #e1e2e3;
+        cursor: pointer;
+        display: inline-block;
+        margin: 3px;
     }
     .curPage{
-        color: red;
+        border: 0;
+        font-weight: bold;
     }
     a {
         padding: 3px 7px 2px 7px;
