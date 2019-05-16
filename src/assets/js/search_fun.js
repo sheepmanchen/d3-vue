@@ -1,16 +1,14 @@
-import * as jQuery from "jquery"
+import * as d3 from "d3"
+import Bus from "./Bus"
 
 // 数据模型，实际环境可以根据 Ajax 来获取
 let articles = [];
-jQuery.ajax({
-    dataType: "json",
-    url: "lecture.json",
-    async: false,
-    success: function (data){
-        data.forEach(function (d) {
-            articles.push(d);
-        });
-    }
+d3.json('lecture.json').then(function(data){
+    console.log(data);
+    data.forEach(function (d) {
+        articles.push(d);
+    });
+    Bus.$emit("read_over", true);
 });
 
 function search (word='None', year='None') {
@@ -41,4 +39,5 @@ function search (word='None', year='None') {
 }
 export {
     search,
+    articles
 }

@@ -53,14 +53,25 @@
                 searchString: "",
                 year: "",
                 years: ['', '2015', '2016', '2017', '2018', '2019',],
+                flag: false,
             }
         },
         computed: {
             // 计算数学，匹配搜索
             filteredArticles: function () {
-                return search(this.searchString, this.year)
+                if (this.flag)
+                    return search(this.searchString, this.year);
+                return [];
             }
-        }
+        },
+        mounted() {
+            Bus.$on("select_year", year => {
+                this.year = year;
+            });
+            Bus.$on("read_over", flag => {
+                this.flag = flag;
+            })
+        },
     };
 </script>
 
