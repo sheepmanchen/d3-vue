@@ -3,22 +3,27 @@ import Bus from "./Bus"
 
 // 数据模型，实际环境可以根据 Ajax 来获取
 let articles = [];
+let articles_array = [];
 d3.json('lecture.json').then(function(data){
-    console.log(data);
     data.forEach(function (d) {
         articles.push(d);
     });
     Bus.$emit("read_over", true);
 });
 
-function search (word='None', year='None') {
-    let articles_array = articles,
-        searchString = word;
+function min(a, b) {
+    if (a < b)
+        return a;
+    return b;
+}
+
+function search (word='None', year='None', page=1, pageSize = 10) {
+    articles_array = articles;
+    let searchString = word;
     if (year === "None")
         year = '';
-
     if (!searchString && !year) {
-        return articles_array;
+        return articles_array.slice(pageSize*(page-1), min(pageSize*page, articles_array.length));
     }
 
     searchString = searchString.trim().toLowerCase();
@@ -35,9 +40,14 @@ function search (word='None', year='None') {
     });
 
     // 返回过来后的数组
-    return articles_array;
+    return articles_array.slice(pageSize*(page-1), min(pageSize*page, articles_array.length));
 }
+
+function getPages(pageSize=10) {
+    return parseInt(articles_array.length / pageSize + 1);
+}
+
 export {
     search,
-    articles
+    getPages
 }

@@ -7,9 +7,20 @@
                     <input type="text" v-model.trim="searchString" placeholder="输入搜索内容" />
                 </label>
                 &nbsp;
+                <span style="color: white; ">年:</span>
                 <label>
                     <select v-model="year">
                         <option v-for="year in years" :key="year">{{year}}</option>
+                    </select>
+                </label>
+                &nbsp;
+                <span style="color: white; ">页容量:</span>
+                <label>
+                    <select v-model="pageSize">
+                    <option value="10">10</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
                     </select>
                 </label>
             </div>
@@ -18,40 +29,76 @@
                 <table id="table">
                     <thead>
                         <tr>
-                            <th> Title </th>
-                            <th> Speaker </th>
-                            <th> Time </th>
-                            <th> Department </th>
-                            <th> Place </th>
+                            <th class="title"> Title </th>
+                            <th class="speaker"> Speaker </th>
+                            <th class="time"> Time </th>
+                            <th class="dep"> Department </th>
+                            <th class="place"> Place </th>
                         </tr>
                     </thead>
                     <!-- 循环输出数据 -->
                     <tbody>
                         <tr  v-for="article in filteredArticles" :key="article.id" :class="{'alt':article.id%2 !== 1}">
-                            <td><a :href="article.link" target="new_window"> {{article.title}}</a> </td>
-                            <td>{{article.speaker}}</td>
-                            <td> {{article.lecture_date}}</td>
-                            <td> {{article.department}}</td>
-                            <td> {{article.venue}}</td>
+                            <td class="title"><a :href="article.link" target="new_window"> {{article.title}}</a> </td>
+                            <td class="speaker">{{article.speaker}}</td>
+                            <td class="time"> {{article.lecture_date}}</td>
+                            <td class="dep"> {{article.department}}</td>
+                            <td class="place"> {{article.venue}}</td>
                         </tr>
                     </tbody>
                 </table>
             </ul>
+
+            <span v-for="i in 10" :key="i">
+                <span v-if="i === 1" class="btn btn-default"
+                      v-on:click="setPage(1)" :class="{'disabled':fDisabled}">
+                    首页
+                </span>
+                <span v-if="i === 1" class="btn btn-default"
+                      v-on:click="setPage(page-1)" :class="{'disabled':fDisabled}">
+                    上一页
+                </span>
+                <span v-if="page - 6 + i > 0 &&page - 6 + i <= maxPage" class="btn btn-number"
+                      v-on:click="setPage(page-6+i)" :class="{'curPage': i === 6}">
+                    {{page-6+i}}
+                </span>
+                <span v-if="i === 10" class="btn btn-default"
+                      v-on:click="setPage(page+1)" :class="{'disabled':lDisabled}">
+                    下一页
+                </span>
+                <span v-if="i === 10 " class="btn btn-default"
+                      v-on:click="setPage(maxPage)" :class="{'disabled':lDisabled}">
+                    尾页
+                </span>
+            </span>
+            <span>{{page}}/{{maxPage}}</span>
         </div>
     </form>
 </template>
 
 <script>
     import Bus from '../assets/js/Bus'
-    import {search} from "../assets/js/search_fun";
+    import {search, getPages} from "../assets/js/search_fun";
     export default {
         name: "SearchBar",
         methods: {
+            setPage(pageIndex){
+                if (pageIndex <= this.maxPage && pageIndex > 0)
+                    this.page = pageIndex;
+                this.fDisabled = this.page === 1;
+                this.lDisabled = this.page === this.maxPage;
+            }
         },
         data() {
             return {
+                //为第一页或者最后一页时，首页，尾页不能点击
+                fDisabled:true,
+                lDisabled:false,
+
                 searchString: "",
                 year: "",
+                page: 1,
+                pageSize: 10,
                 years: ['', '2015', '2016', '2017', '2018', '2019',],
                 flag: false,
             }
@@ -60,8 +107,13 @@
             // 计算数学，匹配搜索
             filteredArticles: function () {
                 if (this.flag)
-                    return search(this.searchString, this.year);
+                    return search(this.searchString, this.year, this.page, this.pageSize);
                 return [];
+            },
+            maxPage: function () {
+                if (this.flag)
+                    return getPages(this.pageSize);
+                return 1
             }
         },
         mounted() {
@@ -145,6 +197,34 @@
         font-size:1em;
         border:1px solid #98bf21;
         padding:3px 7px 2px 7px;
+    }
+    .title{
+        width: 50%;
+        overflow: hidden;
+    }
+    .speaker{
+        width: 20%;
+        overflow: auto;
+    }
+    .time {
+        width: 50px;
+    }
+    .dep{
+        width: 100px;
+        text-align: center;
+    }
+    .place{
+        width: auto;
+        overflow: hidden;
+    }
+    .btn-default{
+        width: 50px;
+    }
+    .btn-number{
+        width: 30px;
+    }
+    .curPage{
+        color: red;
     }
     a {
         padding: 3px 7px 2px 7px;
