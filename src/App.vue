@@ -1,18 +1,10 @@
 <template>
   <div id="app">
-      <!--<word-cloud></word-cloud>-->
-    <!--<img alt="Vue logo" src="./assets/logo.png">-->
-    <!--<HelloWorld msg="Welcome to Your Vue.js App"/>-->
     <div class="row">
       <chart-container
         id="chart-container"
         style="width: 100%"
       ></chart-container>
-      <!--<div id="wordCloud"></div>-->
-      <!--<form-container-->
-        <!--id="form-container"-->
-        <!--style="width: 100%"-->
-      <!--&gt;</form-container>-->
       <search-bar
         id="search-bar"
         style="width: 100%"
