@@ -17,12 +17,10 @@ function min(a, b) {
     return b;
 }
 
-function search (word='None', year='None', page=1, pageSize = 10) {
+function search (word="", year="", month="",department="", page=1, pageSize = 10) {
     articles_array = articles;
     let searchString = word;
-    if (year === "None")
-        year = '';
-    if (!searchString && !year) {
+    if (!searchString && !year && !month && !department) {
         return articles_array.slice(pageSize*(page-1), min(pageSize*page, articles_array.length));
     }
 
@@ -34,7 +32,9 @@ function search (word='None', year='None', page=1, pageSize = 10) {
             item.lecture_date.toLowerCase().indexOf(searchString) !== -1 ||
             item.department.toLowerCase().indexOf(searchString) !== -1 ||
             item.venue.toLowerCase().indexOf(searchString) !== -1 || !searchString) &&
-            (!year || item.lecture_date.toLowerCase().indexOf(year) !== -1)) {
+            (!year || item.lecture_date.toLowerCase().indexOf(year) === 0) &&
+            (!month || item.lecture_date.toLowerCase().indexOf(month) === 5) &&
+            (!department || item.department.toUpperCase() === department)) {
             return item;
         }
     });
@@ -44,7 +44,11 @@ function search (word='None', year='None', page=1, pageSize = 10) {
 }
 
 function getPages(pageSize=10) {
-    return parseInt(articles_array.length / pageSize + 1);
+    if (articles_array.length === 0)
+        return 1;
+    if (articles_array.length % pageSize !== 0)
+        return parseInt(articles_array.length / pageSize + 1);
+    return parseInt(articles_array.length / pageSize);
 }
 
 export {

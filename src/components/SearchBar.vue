@@ -14,6 +14,20 @@
                     </select>
                 </label>
                 &nbsp;
+                <span style="color: white; ">月:</span>
+                <label>
+                    <select v-model="month">
+                        <option v-for="month in months" :key="month">{{month}}</option>
+                    </select>
+                </label>
+                &nbsp;
+                <span style="color: white; ">系:</span>
+                <label>
+                    <select v-model="department">
+                        <option v-for="department in departments" :key="department">{{department}}</option>
+                    </select>
+                </label>
+                &nbsp;
                 <span style="color: white; ">页容量:</span>
                 <label>
                     <select v-model="pageSize">
@@ -92,23 +106,34 @@
 
                 searchString: "",
                 year: "",
+                month: "",
+                department: "",
                 page: 1,
                 pageSize: 10,
                 years: ['', '2015', '2016', '2017', '2018', '2019',],
+                months: ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+                departments: ['', '生物系(BIO)', '生医工(BME)', '化学系(Chemistry)', '计算机系(CSE)', '电子系(EE)'
+                    ,'环境系(ESE)', '地空系(ESS)', '金融系(FIN)', '航天航空(MAE)', '医学院(MED)', '机械系(MEE)'
+                    , '材料系(MSE)', '海洋系(Ocean)', '物理系(Physics)'],
                 flag: false,
             }
         },
         computed: {
             // 计算数学，匹配搜索
             filteredArticles: function () {
+                let dep = "";
+                if (this.department !== "")
+                    dep = this.department.substring(this.department.indexOf('(')+1, this.department.indexOf(')'));
                 if (this.flag)
-                    return search(this.searchString, this.year, this.page, this.pageSize);
+                    return search(this.searchString, this.year, this.month, dep,this.page, this.pageSize);
                 return [];
             },
             maxPage: function () {
+                if (this.filteredArticles === [])
+                    return 1;
                 if (this.flag)
                     return getPages(this.pageSize);
-                return 1
+                return 1;
             },
             showPageNumber: function () {
                 let start = this.page - 5;
@@ -134,7 +159,8 @@
             });
             Bus.$on("read_over", flag => {
                 this.flag = flag;
-            })
+                console.log("从JS中获取了数据");
+            });
         },
     };
 </script>
@@ -204,22 +230,26 @@
         width:100%;
         border-collapse:collapse;
         font-size: 13px;
+        table-layout: fixed;
     }
     td, th{
+        white-space:nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-size:1em;
+        height: 30px;
         border:1px solid #98bf21;
         padding:3px 7px 2px 7px;
     }
     .title{
         width: 50%;
-        overflow: hidden;
     }
     .speaker{
         width: 20%;
-        overflow: auto;
     }
     .time {
-        width: 50px;
+        width: 85px;
+        text-align: center;
     }
     .dep{
         width: 100px;
@@ -227,7 +257,6 @@
     }
     .place{
         width: auto;
-        overflow: hidden;
     }
     .btn-default{
         width: 60px;
