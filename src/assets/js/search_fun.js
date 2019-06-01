@@ -4,11 +4,21 @@ import Bus from "./Bus"
 // 数据模型，实际环境可以根据 Ajax 来获取
 let articles = [];
 let articles_array = [];
+
+// d3.json('http://10.21.91.207:8080/exer/lecture').then(function(data){
+//     data.forEach(function (d) {
+//         articles.push(d);
+//     });
+//     Bus.$emit("read_over", true);
+//     console.log("服务器数据获取成功");
+// });
+
 d3.json('lecture.json').then(function(data){
     data.forEach(function (d) {
         articles.push(d);
     });
     Bus.$emit("read_over", true);
+    console.log("从本地获取了数据");
 });
 
 function min(a, b) {
@@ -23,7 +33,6 @@ function search (word="", year="", month="",department="", page=1, pageSize = 10
     if (!searchString && !year && !month && !department) {
         return articles_array.slice(pageSize*(page-1), min(pageSize*page, articles_array.length));
     }
-
     searchString = searchString.trim().toLowerCase();
 
     articles_array = articles_array.filter(function (item) {
@@ -38,7 +47,6 @@ function search (word="", year="", month="",department="", page=1, pageSize = 10
             return item;
         }
     });
-
     // 返回过来后的数组
     return articles_array.slice(pageSize*(page-1), min(pageSize*page, articles_array.length));
 }
