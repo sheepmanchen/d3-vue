@@ -63,7 +63,7 @@
                  let playButton = d3.select(".outbox").append("div")
                      .attr("class", "play-button button")
                      .style("transform","translate(10px,10px)")
-                     .text("PLAY!")
+                     .text("Auto")
                      .style("transform","translate(" + 40 +"px ,"+ -10 +"px)");
 
                  let buttonContainer = d3.select(".outbox").append("div").attr("class", "container")
@@ -288,12 +288,12 @@
 
     }
 
-    body {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /*body {*/
+        /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
         /*width: 600px;*/
         /*height: 300px;*/
-        position: relative;
-    }
+        /*position: relative;*/
+    /*}*/
     svg {
         /*width: 100%;*/
         /*height: 100%;*/
