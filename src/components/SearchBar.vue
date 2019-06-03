@@ -259,14 +259,14 @@
         width: auto;
     }
     .btn-default{
-        width: 60px;
+        /*width: 60px;*/
         border: 1px solid #e1e2e3;
         cursor: pointer;
         display: inline-block;
         margin: 3px;
     }
     .btn-number{
-        width: 30px;
+        /*width: 30px;*/
         border: 1px solid #e1e2e3;
         cursor: pointer;
         display: inline-block;
