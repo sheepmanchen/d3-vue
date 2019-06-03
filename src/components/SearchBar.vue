@@ -39,48 +39,38 @@
                 </label>
             </div>
 
-            <ul>
-                <table id="table">
-                    <thead>
-                        <tr>
-                            <th class="title"> Title </th>
-                            <th class="speaker"> Speaker </th>
-                            <th class="time"> Time </th>
-                            <th class="dep"> Department </th>
-                            <th class="place"> Place </th>
-                        </tr>
-                    </thead>
-                    <!-- 循环输出数据 -->
-                    <tbody>
-                        <tr  v-for="article in filteredArticles" :key="article.id" :class="{'alt':article.id%2 !== 1}">
-                            <td class="title"><a :href="article.link" target="new_window"> {{article.title}}</a> </td>
-                            <td class="speaker">{{article.speaker}}</td>
-                            <td class="time"> {{article.lecture_date}}</td>
-                            <td class="dep"> {{article.department}}</td>
-                            <td class="place"> {{article.venue}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </ul>
+            <b-table striped hover bordered fixed :items="filteredArticles" :busy="!flag" :fields="fields">
+                <!-- 等待界面 -->
+                <div slot="table-busy" class="text-center text-danger my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>Loading...</strong>
+                </div>
+                <template slot="title" slot-scope="data">
+                    <!-- `设置链接 -->
+                    <a :href="data.value.link">{{data.value.title}}</a>
+                </template>
+            </b-table>
 
-            <span class="btn btn-default" v-on:click="setPage(1)" :class="{'disabled':fDisabled}">
-                首页
-            </span>
-            <span class="btn btn-default" v-on:click="setPage(page-1)" :class="{'disabled':fDisabled}">
-                上一页
-            </span>
-            <span v-for="i in showPageNumber" :key="i">
-                <span class="btn btn-number" v-on:click="setPage(i)" :class="{'curPage': i === page}">
-                    {{i}}
+            <div>
+                <span class="btn btn-default" v-on:click="setPage(1)" :class="{'disabled':fDisabled}">
+                    首页
                 </span>
-            </span>
-            <span class="btn btn-default" v-on:click="setPage(page+1)" :class="{'disabled':lDisabled}">
-                下一页
-            </span>
-            <span class="btn btn-default" v-on:click="setPage(maxPage)" :class="{'disabled':lDisabled}">
-                尾页
-            </span>
-            <span>{{page}}/{{maxPage}}</span>
+                <span class="btn btn-default" v-on:click="setPage(page-1)" :class="{'disabled':fDisabled}">
+                    上一页
+                </span>
+                <span v-for="i in showPageNumber" :key="i">
+                    <span class="btn btn-number" v-on:click="setPage(i)" :class="{'curPage': i === page}">
+                        {{i}}
+                    </span>
+                </span>
+                <span class="btn btn-default" v-on:click="setPage(page+1)" :class="{'disabled':lDisabled}">
+                    下一页
+                </span>
+                <span class="btn btn-default" v-on:click="setPage(maxPage)" :class="{'disabled':lDisabled}">
+                    尾页
+                </span>
+                <span>{{page}}/{{maxPage}}</span>
+            </div>
         </div>
     </form>
 </template>
@@ -110,6 +100,12 @@
                 department: "",
                 page: 1,
                 pageSize: 10,
+                fields: ['title','speaker','lecture_date',
+                    {
+                        key: 'venue',
+                        label: 'Place',
+                    }, 'department',
+                    ],
                 years: ['', '2015', '2016', '2017', '2018', '2019',],
                 months: ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
                 departments: ['', '生物系(BIO)', '生医工(BME)', '化学系(Chemistry)', '计算机系(CSE)', '电子系(EE)'
@@ -123,7 +119,8 @@
             filteredArticles: function () {
                 let dep = "";
                 if (this.department !== "")
-                    dep = this.department.substring(this.department.indexOf('(')+1, this.department.indexOf(')'));
+                    dep = this.department
+                        .substring(this.department.indexOf('(')+1, this.department.indexOf(')')).toUpperCase();
                 if (this.flag)
                     return search(this.searchString, this.year, this.month, dep,this.page, this.pageSize);
                 return [];
@@ -174,7 +171,7 @@
         搜索输入框
     --------------------------*/
     .bar{
-        background-color:#5c9bb7;
+        background-color:#2BB7B3;
 
         box-shadow: 0 1px 1px #ccc;
         border-radius: 2px;
@@ -219,54 +216,24 @@
         color: #738289;
         font-family: inherit;
     }
-    ul{
-        list-style: none;
-        width: 100%;
-        margin: 0 auto;
-        text-align: left;
-    }
     table{
-        font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-        width:100%;
-        border-collapse:collapse;
-        font-size: 13px;
-        table-layout: fixed;
-    }
-    td, th{
-        white-space:nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size:1em;
         height: 30px;
         border:1px solid #98bf21;
         padding:3px 7px 2px 7px;
+        font-family:"Times New Roman", 宋体 , sans-serif;
+        width:100%;
+        border-collapse:collapse;
+        font-size: 14px;
     }
-    .title{
-        width: 50%;
-    }
-    .speaker{
-        width: 20%;
-    }
-    .time {
-        width: 85px;
-        text-align: center;
-    }
-    .dep{
-        width: 100px;
-        text-align: center;
-    }
-    .place{
-        width: auto;
-    }
-    .btn-default{
-        width: 60px;
+    .btn-default {
+        /*width: 60px;*/
         border: 1px solid #e1e2e3;
         cursor: pointer;
         display: inline-block;
         margin: 3px;
     }
     .btn-number{
-        width: 30px;
+        /*width: 30px;*/
         border: 1px solid #e1e2e3;
         cursor: pointer;
         display: inline-block;
@@ -275,21 +242,6 @@
     .curPage{
         border: 0;
         font-weight: bold;
-    }
-    a {
-        padding: 3px 7px 2px 7px;
-    }
-    th {
-        font-size:1.1em;
-        text-align:center;
-        padding-top:5px;
-        padding-bottom:4px;
-        background-color:#A7C942;
-        color:#ffffff;
-    }
-    tr.alt td{
-        color:#000000;
-        background-color:#EAF2D3;
     }
 
 </style>

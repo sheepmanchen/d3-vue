@@ -15,6 +15,11 @@ let articles_array = [];
 
 d3.json('lecture.json').then(function(data){
     data.forEach(function (d) {
+        d.title = {
+            title: d.title,
+            link: d.link
+        };
+        delete d.link;
         articles.push(d);
     });
     Bus.$emit("read_over", true);
@@ -36,7 +41,7 @@ function search (word="", year="", month="",department="", page=1, pageSize = 10
     searchString = searchString.trim().toLowerCase();
 
     articles_array = articles_array.filter(function (item) {
-        if ((item.title.toLowerCase().indexOf(searchString) !== -1 ||
+        if ((item.title.title.toLowerCase().indexOf(searchString) !== -1 ||
             item.speaker.toLowerCase().indexOf(searchString) !== -1 ||
             item.lecture_date.toLowerCase().indexOf(searchString) !== -1 ||
             item.department.toLowerCase().indexOf(searchString) !== -1 ||
