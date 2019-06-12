@@ -1,6 +1,7 @@
 // var d3 = require("d3"),
 import * as d3 from 'd3'
 import cloud from './d3.layout.cloud.js'
+import Bus from "./Bus";
 
 
 
@@ -12,6 +13,14 @@ d3.json('lecture.json').then(function(data){
     filter_data_by_year(2015);
     w(2015);
 });
+
+// d3.json('http://10.21.91.207:8080/exer/lecture').then(function(data){
+//     data.forEach(function (d) {
+//         lecture_data.push(d);
+//     });
+//     filter_data_by_year(2015);
+//     w(2015);
+// });
 
 // let dataSet;
 // // d3.csv("department_change.csv").then(function (data) {
@@ -45,7 +54,7 @@ function filter_data_by_year (y){
         // }
 
     });
-    let stop_words = ["【金融系学术讲座】","size","Beyond","new","systems","电子与电气工程系系列学术讲座：","云计算安全的挑战与实践","during","【Math","之","recent","-","using","based","value","analysis","use","TBA","–","cells","towards","","via","&","application","applications","On","theory", "Design","Challenges", "Research", "A", "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your","ain't","aren't","can't","could've","couldn't","didn't","doesn't","don't","hasn't","he'd","he'll","he's","how'd","how'll","how's","i'd","i'll","i'm","i've","isn't","it's","might've","mightn't","must've","mustn't","shan't","she'd","she'll","she's","should've","shouldn't","that'll","that's","there's","they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't","what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd","who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd","you'll","you're","you've"];
+    let stop_words = ["学术讲座","size","Beyond","new","systems","电子与电气工程系系列学术讲座：","云计算安全的挑战与实践","during","【Math","之","recent","-","using","based","value","analysis","use","TBA","–","cells","towards","","via","&","application","applications","On","theory", "Design","Challenges", "Research", "A", "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your","ain't","aren't","can't","could've","couldn't","didn't","doesn't","don't","hasn't","he'd","he'll","he's","how'd","how'll","how's","i'd","i'll","i'm","i've","isn't","it's","might've","mightn't","must've","mustn't","shan't","she'd","she'll","she's","should've","shouldn't","that'll","that's","there's","they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't","what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd","who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd","you'll","you're","you've"];
     stop_words.forEach(function (d) {
         map[d] = 0;
         let to_up = d.charAt(0).toUpperCase() + d.slice(1);
@@ -151,27 +160,10 @@ export default function w(c_year) {
                     return d.text;
                 })
                 .on("click", function (d) {
-                    // callback(d);
-                    // // console.log(d);
-                    // this.axios.get('10.21.91.207:8080/exer/lecture').then((response)=>{
-                    //     console.log(response.data);//成功回调
-                    // },(response)=>{
-                    //     //失败回调
-                    //     console.log("fail");
-                    //     console.log(response);
-                    //
-                    // })
-                    // d.style("fill","red");
+                    console.log(d);
+                    Bus.$emit("cloud_click", d.text);
                 });
         }
-
-        function callback(d){
-            // d.style("color","red");
-            // d.text="www";
-        }
-
-
-
     })
 }
 
