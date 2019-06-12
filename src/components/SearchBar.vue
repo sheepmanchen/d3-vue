@@ -108,9 +108,9 @@
                     ],
                 years: ['', '2015', '2016', '2017', '2018', '2019',],
                 months: ['', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-                departments: ['', '生医工(BME)', '化学系(Chemistry)', '计算机系(CSE)', '电子系(EE)'
-                    ,'环境系(ESE)', '地空系(ESS)', '金融系(FIN)', '航天航空(MAE)', '医学院(MED)', '机械系(MEE)'
-                    , '材料系(MSE)', '海洋系(Ocean)', '物理系(Physics)', '生物系(BIO)'],
+                departments: ['', '生物系(BIO)', '生医工(BME)', '化学系(Chemistry)', '计算机系(CSE)', '电子系(EE)'
+                    ,'环境系(ESE)', '地空系(ESS)', '金融系(FIN)', '航天航空(MAE)', '数学系(Math)', '医学院(MED)'
+                    , '机械系(MEE)', '材料系(MSE)', '海洋系(Ocean)', '物理系(Physics)'],
                 flag: false,
             }
         },
@@ -157,6 +157,18 @@
             Bus.$on("read_over", flag => {
                 this.flag = flag;
                 console.log("从JS中获取了数据");
+            });
+            Bus.$on("cloud_click", searchString => {
+                this.searchString = searchString;
+                console.log("词云被点击");
+            });
+            Bus.$on("mailString", searchString => {
+                this.searchString = searchString;
+                console.log("搜索被点击");
+            });
+            Bus.$on("sendDep", department => {
+                this.department = department;
+                console.log("部门被点击");
             });
         },
     };
@@ -242,6 +254,7 @@
     .curPage{
         border: 0;
         font-weight: bold;
+        pointer-events: none;
     }
 
 </style>
