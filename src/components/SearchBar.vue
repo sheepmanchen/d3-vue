@@ -242,6 +242,7 @@
     .curPage{
         border: 0;
         font-weight: bold;
+        pointer-events: none;
     }
 
 </style>
