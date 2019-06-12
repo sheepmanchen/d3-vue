@@ -66,7 +66,7 @@
     </div>
 
     <footer class="footer">
-      <p id="footer-text">Contact Us @ <a href="mailto:xxx.vis@gmail.com">Email</a>.<br> </p>
+      <p id="footer-text">Contact Us @ <a href="mailto:11611613@mail.sustech.edu.cn">Email</a>.<br> </p>
     </footer>
   </div>
 </template>
@@ -114,14 +114,13 @@ export default {
     }
   },
   mounted() {
-    axios.get('HTTP://10.21.91.207:8080/exer/lecture').then((response)=>{
-      console.log(response.data);//成功回调
-    },(response)=>{
-      //失败回调
-      console.log("fail");
-      console.log(response);
-
-    });
+//     axios.get('HTTP://10.21.91.207:8080/exer/lecture').then((response)=>{
+//       console.log(response.data);//成功回调
+//     },(response)=>{
+//       //失败回调
+//       console.log("fail");
+//       console.log(response);
+//     });
   }
 }
 </script>
