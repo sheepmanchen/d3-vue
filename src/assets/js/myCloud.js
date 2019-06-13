@@ -10,8 +10,8 @@ d3.json('lecture.json').then(function(data){
     data.forEach(function (d) {
         lecture_data.push(d);
     });
-    filter_data_by_year(2015);
-    w(2015);
+    filter_data_by_year('ALL',2015);
+    w('ALL', 2015);
 });
 
 // d3.json('http://10.21.91.207:8080/exer/lecture').then(function(data){
@@ -30,60 +30,81 @@ d3.json('lecture.json').then(function(data){
 //     let b = cur_year === parseInt(e.year);
 //     return b;
 // });
+function isChineseChar(str){
 
-function filter_data_by_year (y){
+    var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+
+    return reg.test(str);
+
+}
+
+function filter_data_by_year (c_dpt, c_year){
     let dataSet;
     dataSet = lecture_data.filter(function (e) {
-        var str = y.toString();
+       if(c_dpt==='ALL'){
+           return e;
+       }
+       else{
+           return e.department===c_dpt;
+       }
+    });
+    dataSet = dataSet.filter(function (e) {
+        var str = c_year.toString();
         return e.lecture_date.match(str)!=null;
     });
     let map = {};
+    let stop_words = ["Of","through","of","in","to","Using","学术讲座","size","Beyond","new","systems","电子与电气工程系系列学术讲座：","云计算安全的挑战与实践","during","【Math","之","recent","-","using","based","value","analysis","use","TBA","–","cells","towards","","via","&","application","applications","On","theory", "Design","Challenges", "Research", "A", "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","FUN:","Just","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your","ain't","aren't","can't","could've","couldn't","didn't","doesn't","don't","hasn't","he'd","he'll","he's","how'd","how'll","how's","i'd","i'll","i'm","i've","isn't","it's","might've","mightn't","must've","mustn't","shan't","she'd","she'll","she's","should've","shouldn't","that'll","that's","there's","they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't","what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd","who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd","you'll","you're","you've"];
     dataSet.forEach(function(d){
         var temp_str = d.title.toString().split(" ");
         for(var i=0; i<temp_str.length; i++){
             var strWord = temp_str[i];
-            if(!map[strWord]){
-                map[strWord]=1;
+            var flag = true;
+            stop_words.forEach(function (d) {
+                let to_up = d.charAt(0).toUpperCase() + d.slice(1);
+                if(strWord===d || strWord===to_up){
+                    flag = false;
+                }
+            });
+            if(!isChineseChar(strWord)&&flag){
+                if(!map[strWord]){
+                    map[strWord]=1;
+                }
+                else{
+                    map[strWord]++;
+                }
             }
-            else{
-                map[strWord]++;
-            }
+
         }
         // for(var word in map){
         //     console.log(word + "-------"+map[word])
         // }
 
     });
-    let stop_words = ["学术讲座","size","Beyond","new","systems","电子与电气工程系系列学术讲座：","云计算安全的挑战与实践","during","【Math","之","recent","-","using","based","value","analysis","use","TBA","–","cells","towards","","via","&","application","applications","On","theory", "Design","Challenges", "Research", "A", "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your","ain't","aren't","can't","could've","couldn't","didn't","doesn't","don't","hasn't","he'd","he'll","he's","how'd","how'll","how's","i'd","i'll","i'm","i've","isn't","it's","might've","mightn't","must've","mustn't","shan't","she'd","she'll","she's","should've","shouldn't","that'll","that's","there's","they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't","what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd","who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd","you'll","you're","you've"];
-    stop_words.forEach(function (d) {
-        map[d] = 0;
-        let to_up = d.charAt(0).toUpperCase() + d.slice(1);
-        map[to_up] = 0;
-    });
+    // let stop_words = ["Of","through","of","in","to","Using","学术讲座","size","Beyond","new","systems","电子与电气工程系系列学术讲座：","云计算安全的挑战与实践","during","【Math","之","recent","-","using","based","value","analysis","use","TBA","–","cells","towards","","via","&","application","applications","On","theory", "Design","Challenges", "Research", "A", "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","FUN:","Just","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your","ain't","aren't","can't","could've","couldn't","didn't","doesn't","don't","hasn't","he'd","he'll","he's","how'd","how'll","how's","i'd","i'll","i'm","i've","isn't","it's","might've","mightn't","must've","mustn't","shan't","she'd","she'll","she's","should've","shouldn't","that'll","that's","there's","they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't","what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd","who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd","you'll","you're","you've"];
+    // stop_words.forEach(function (d) {
+    //     // if(map[d]!==0){
+    //         map[d] = -1;
+    //         let to_up = d.charAt(0).toUpperCase() + d.slice(1);
+    //         map[to_up] = -1;
+    //     // }
+    // });
     var items = Object.keys(map).map(function(key){
         return [key, map[key]];
     });
     items.sort(function(first, second){
         return second[1] - first[1];
     });
-    let cut_items = items.slice(0, items.length/13);
 
+    // let cut_items = items.slice(0, items.length/13);
+    let cut_items = items.slice(0, items.length/13);
+    if(c_dpt!=='ALL'){
+        cut_items = items.slice(0, 20);
+    }
     let filter_data = [];
     cut_items.forEach(function (d) {
         let temp = new Object();
         temp.text=d[0];
-        if(y==2015 ) {
-            temp.size = d[1] * 15;
-        }
-        else if( y==2016){
-            temp.size = d[1] * 7;
-        }
-        else if( y==2017 || y==2018){
-            temp.size = d[1] * 5;
-        }
-        else if(y==2019){
-            temp.size = d[1] * 10;
-        }
+        temp.size=30;
         filter_data.push(temp);
     });
 
@@ -93,7 +114,7 @@ function filter_data_by_year (y){
     return filter_data;
 }
 
-export default function w(c_year) {
+export default function w(c_dpt, c_year) {
 
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
         width = 450 - margin.left - margin.right,
@@ -101,7 +122,7 @@ export default function w(c_year) {
 
     let frequency_list;
 
-    frequency_list = filter_data_by_year(c_year);
+    frequency_list = filter_data_by_year(c_dpt, c_year);
     d3.select(".cloud-svg").remove();
     var svg = d3.select("body").select("#my-cloud")
         .append("div")
@@ -122,7 +143,7 @@ export default function w(c_year) {
     d3.csv("topicData.csv").then(function(data) {
 
         var color = d3.scaleLinear()
-            .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
+            .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 30])
             .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
 
         var layout = cloud().size([width, height])
@@ -166,5 +187,4 @@ export default function w(c_year) {
         }
     })
 }
-
 

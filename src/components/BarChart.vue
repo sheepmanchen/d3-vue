@@ -1,7 +1,7 @@
 <template>
     <div id="mydiv">
         <div id="bar-chart"></div>
-        <word-cloud :cloud_year="cloud_year" id="my-cloud"></word-cloud>
+        <word-cloud :cloud_year="cloud_year" :cloud_dpt="cloud_dpt" id="my-cloud"></word-cloud>
     </div>
 </template>
 
@@ -17,8 +17,10 @@
         },
         data(){
           var select_year = 2015;
+          var select_dpt = 'ALL';
           return {
-              cloud_year: select_year
+              cloud_year: select_year,
+              cloud_dpt: select_dpt
           }
         },
         mounted() {
@@ -59,11 +61,13 @@
 
                  // var form = d3.select("#myform").style("transform","translate(150px, 30px)");
                  this.cloud_year = 2015;
+                 this.cloud_dpt = 'ALL';
 
                  let playButton = d3.select(".outbox").append("div")
                      .attr("class", "play-button button")
                      .style("transform","translate(10px,10px)")
                      .text("Auto")
+                     .attr("id","playButton")
                      .style("transform","translate(" + 40 +"px ,"+ -10 +"px)");
 
                  let buttonContainer = d3.select(".outbox").append("div").attr("class", "container")
@@ -94,19 +98,13 @@
                      update(this.cloud_year);
                  });
 
-
-                 playButton.on("click", function(){
+                 function clickPlayButton() {
                      var i = 0;
-                     if (play_button_clicked===false){
+                     play_button_clicked = true;
+                     clickPlay();
+                 }
 
-                         play_button_clicked=true;
-
-                         clickPlay();
-
-                         play_button_clicked=false;
-
-                     }
-                 });
+                 playButton.on("click",clickPlayButton);
 
                 function clickPlay(){
                     var i = 0;
@@ -117,8 +115,8 @@
                             clearInterval(playInterval);
                         }
                     }, 1000);
-
                 }
+
                  var xScale = d3.scaleLinear().range([0,width]);
                  var yScale = d3.scaleBand().range([0, height]).padding(0.2);
 
@@ -129,7 +127,7 @@
                      buttons.filter(function(d){
                          return d==updateYear;
                      }).classed("selected", true);
-
+                     self.cloud_dpt = 'ALL';
                      self.cloud_year = updateYear;
                      changeYear(self.cloud_year);
                      Bus.$emit("select_year", updateYear);
@@ -216,6 +214,39 @@
                          // .attr("width",d => xScale(xValue(d)))
 
                          bars = svg.selectAll(".temp-g").data(dataSet);
+                        bars.attr("fill", function(d, i){
+                            console.log("d="+d);
+                            if (d.department=='CSE') {
+                                return "#0066CC";
+                            } else if (d.department=='Math') {
+                                return "#FF6600";
+                            }else if (d.department=='EE') {
+                                return "#7A739E";
+                            }else if (d.department=='ESE') {
+                                return "#419E6E";
+                            }else if (d.department=='MEE') {
+                                return "#ff1000";
+                            }else if (d.department=='Physics') {
+                                return "#CC317E";
+                            }else if (d.department=='BME') {
+                                return "#FFCCCC";
+                            }else if (d.department=='Ocean') {
+                                return "#8CD8FF";
+                            }else if (d.department=='FIN') {
+                                return "#FFEB36";
+                            }else if (d.department=='MAE') {
+                                return "#938CFF";
+                            }else if (d.department=='MSE') {
+                                return "#FF6600";
+                            }else if (d.department=='MED') {
+                                return "#39403C";
+                            }else if (d.department=='BIO') {
+                                return "#8FBC8F";
+                            }else if (d.department=='Chemistry') {
+                                return "#FFC4AB";
+                            }
+                            return "yellow";
+                        });
                          var barText = bars.append("text")
                              .transition()
                              .duration(500)
@@ -243,6 +274,10 @@
                              div.style("display", "inline-block");
                              div.html((d.department) + "<br>" + (d.totalNum));
 
+                         }).on("click", function(d){
+                             console.log("监控到bar被点击"+(d.department));
+                             self.cloud_dpt = d.department;
+                             Bus.$emit("sendDep", d.department);
                          });
                          bars.on("mouseout", function () {
                              div.style("display", "none");
@@ -273,8 +308,8 @@
 
 <style>
     .bar {
-        fill: steelblue;
-        fill-opacity: .5;
+        /*fill: steelblue;*/
+        fill-opacity: .4;
 
     }
 
@@ -330,7 +365,11 @@
         stroke-width: 2;
     }
 
-
+    rect:hover{
+        opacity: .7;
+        fill: #b6b7b2;
+        cursor: pointer
+    }
 
     /*text.value{*/
     /*font-size: 200%;*/
