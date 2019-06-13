@@ -80,14 +80,7 @@ function filter_data_by_year (c_dpt, c_year){
         // }
 
     });
-    // let stop_words = ["Of","through","of","in","to","Using","学术讲座","size","Beyond","new","systems","电子与电气工程系系列学术讲座：","云计算安全的挑战与实践","during","【Math","之","recent","-","using","based","value","analysis","use","TBA","–","cells","towards","","via","&","application","applications","On","theory", "Design","Challenges", "Research", "A", "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","FUN:","Just","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your","ain't","aren't","can't","could've","couldn't","didn't","doesn't","don't","hasn't","he'd","he'll","he's","how'd","how'll","how's","i'd","i'll","i'm","i've","isn't","it's","might've","mightn't","must've","mustn't","shan't","she'd","she'll","she's","should've","shouldn't","that'll","that's","there's","they'd","they'll","they're","they've","wasn't","we'd","we'll","we're","weren't","what'd","what's","when'd","when'll","when's","where'd","where'll","where's","who'd","who'll","who's","why'd","why'll","why's","won't","would've","wouldn't","you'd","you'll","you're","you've"];
-    // stop_words.forEach(function (d) {
-    //     // if(map[d]!==0){
-    //         map[d] = -1;
-    //         let to_up = d.charAt(0).toUpperCase() + d.slice(1);
-    //         map[to_up] = -1;
-    //     // }
-    // });
+
     var items = Object.keys(map).map(function(key){
         return [key, map[key]];
     });
