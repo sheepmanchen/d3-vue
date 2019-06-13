@@ -21,10 +21,10 @@
             </b-nav-form>
 
             <b-nav-item-dropdown text="Department" right>
-              <b-dropdown-item  v-for="dep in items" :key="dep.DPT" v-on:click="sendDep(dep.WORD)">
+              <b-dropdown-item  v-for="dep in items" :key="dep.DPT" v-on:click="sendDep(dep.DPT)">
                 {{dep.NAME}}
               </b-dropdown-item>
-              <b-dropdown-item  v-for="dep in objects" :key="dep.DPT" v-on:click="sendDep(dep.WORD)">
+              <b-dropdown-item  v-for="dep in objects" :key="dep.DPT" v-on:click="sendDep(dep.DPT)">
                 {{dep.NAME}}
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -94,23 +94,23 @@ export default {
       searchString: "",
       fields: ['DPT', 'NAME'],
       items: [
-        { isActive: true, DPT: 'BIO', NAME: '生物系', WORD: '生物系(BIO)'},
-        { isActive: true, DPT: 'BME', NAME: '生物医学工程系', WORD: '生医工(BME)'},
-        { isActive: true, DPT: 'CHEM', NAME: '化学系', WORD: '化学系(Chemistry)'},
-        { isActive: true, DPT: 'CSE', NAME: '计算机科学与工程系', WORD: '计算机系(CSE)'},
-        { isActive: true, DPT: 'EEE', NAME: '电子与电气工程系', WORD: '电子系(EE)'},
-        { isActive: true, DPT: 'ESE', NAME: '环境科学与工程学院', WORD: '环境系(ESE)'},
-        { isActive: true, DPT: 'ESS', NAME: '地球与空间科学系', WORD: '地空系(ESS)'},
+        { isActive: true, DPT: 'BIO', NAME: '生物系'},
+        { isActive: true, DPT: 'BME', NAME: '生物医学工程系'},
+        { isActive: true, DPT: 'CHEM', NAME: '化学系'},
+        { isActive: true, DPT: 'CSE', NAME: '计算机科学与工程系'},
+        { isActive: true, DPT: 'EEE', NAME: '电子与电气工程系'},
+        { isActive: true, DPT: 'ESE', NAME: '环境科学与工程学院'},
+        { isActive: true, DPT: 'ESS', NAME: '地球与空间科学系'},
       ],
       objects: [
-        { isActive: true, DPT: 'FIN', NAME: '金融系', WORD: '金融系(FIN)'},
-        { isActive: true, DPT: 'MAE', NAME: '力学与航空航天工程系', WORD: '航天航空(MAE)'},
-        { isActive: true, DPT: 'MATH', NAME: '数学系', WORD: '数学系(Math)'},
-        { isActive: true, DPT: 'MEDICAL', NAME: '医学院', WORD: '医学院(MED)'},
-        { isActive: true, DPT: 'MEE', NAME: '机械与能源工程系', WORD: '机械系(MEE)'},
-        { isActive: true, DPT: 'MSE', NAME: '材料科学与工程系', WORD: '材料系(MSE)'},
-        { isActive: true, DPT: 'OCEAN', NAME: '海洋科学与工程系', WORD: '海洋系(Ocean)'},
-        { isActive: true, DPT: 'PHY', NAME: '物理系', WORD: '物理系(Physics)'},
+        { isActive: true, DPT: 'FIN', NAME: '金融系'},
+        { isActive: true, DPT: 'MAE', NAME: '力学与航空航天工程系'},
+        { isActive: true, DPT: 'MATH', NAME: '数学系'},
+        { isActive: true, DPT: 'MEDICAL', NAME: '医学院'},
+        { isActive: true, DPT: 'MEE', NAME: '机械与能源工程系'},
+        { isActive: true, DPT: 'MSE', NAME: '材料科学与工程系'},
+        { isActive: true, DPT: 'OCEAN', NAME: '海洋科学与工程系'},
+        { isActive: true, DPT: 'PHY', NAME: '物理系'},
       ]
 
     }

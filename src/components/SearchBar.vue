@@ -78,6 +78,7 @@
 <script>
     import Bus from '../assets/js/Bus'
     import {search, getPages} from "../assets/js/search_fun";
+    import {adapter} from "../assets/js/adapter";
     export default {
         name: "SearchBar",
         methods: {
@@ -153,6 +154,7 @@
         mounted() {
             Bus.$on("select_year", year => {
                 this.year = year;
+                this.searchString = "";
             });
             Bus.$on("read_over", flag => {
                 this.flag = flag;
@@ -167,7 +169,7 @@
                 console.log("搜索被点击");
             });
             Bus.$on("sendDep", department => {
-                this.department = department;
+                this.department = adapter[department];
                 console.log("部门被点击");
             });
         },
