@@ -98,7 +98,7 @@ export default {
         { isActive: true, DPT: 'BME', NAME: '生物医学工程系', HTML: 'http://bme.sustech.edu.cn/'},
         { isActive: true, DPT: 'CHEM', NAME: '化学系', HTML: 'http://chem.sustc.edu.cn/'},
         { isActive: true, DPT: 'CSE', NAME: '计算机科学与工程系', HTML: 'http://cse.sustc.edu.cn/'},
-        { isActive: true, DPT: 'EEE', NAME: '电子与电气工程系', HTML: 'http://eee.sustc.edu.cn/'},
+        { isActive: true, DPT: 'EE', NAME: '电子与电气工程系', HTML: 'http://eee.sustc.edu.cn/'},
         { isActive: true, DPT: 'ESE', NAME: '环境科学与工程学院', HTML: 'http://ese.sustc.edu.cn/'},
         { isActive: true, DPT: 'ESS', NAME: '地球与空间科学系', HTML: 'http://ess.sustc.edu.cn/'},
       ],
