@@ -15,16 +15,16 @@
 
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
-            <b-nav-form>
-              <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="searchString"></b-form-input>
-              <b-button size="sm" class="my-2 my-sm-0" pill v-on:click="sendString()">Search</b-button>
-            </b-nav-form>
+<!--            <b-nav-form>-->
+<!--              <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="searchString"></b-form-input>-->
+<!--              <b-button size="sm" class="my-2 my-sm-0" pill v-on:click="sendString()">Search</b-button>-->
+<!--            </b-nav-form>-->
 
             <b-nav-item-dropdown text="Department" right>
-              <b-dropdown-item  v-for="dep in items" :key="dep.DPT" v-on:click="sendDep(dep.DPT)">
+              <b-dropdown-item  v-for="dep in items" :key="dep.DPT" v-on:click="goto(dep.HTML)">
                 {{dep.NAME}}
               </b-dropdown-item>
-              <b-dropdown-item  v-for="dep in objects" :key="dep.DPT" v-on:click="sendDep(dep.DPT)">
+              <b-dropdown-item  v-for="dep in objects" :key="dep.DPT" v-on:click="goto(dep.HTML)">
                 {{dep.NAME}}
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -34,9 +34,9 @@
       </b-navbar>
     </div>
     <div class="jumbotron" id="jumbo">
-      <h1 class="display-5">SUSTech's Seminars Visualization </h1>
+      <h1 class="display-5">SUSTech's Seminar Visualization </h1>
       <!--<br> <br>-->
-      <p>Updated monthly based on data from
+      <p>Update monthly based on data from
         <a href="https://www.sustech.edu.cn" target="_blank">sustech.edu.cn</a> </p>
       <p>Last Updated: 2019/06/03</p>
       <hr class="my-3">
@@ -94,33 +94,31 @@ export default {
       searchString: "",
       fields: ['DPT', 'NAME'],
       items: [
-        { isActive: true, DPT: 'BIO', NAME: '生物系'},
-        { isActive: true, DPT: 'BME', NAME: '生物医学工程系'},
-        { isActive: true, DPT: 'CHEM', NAME: '化学系'},
-        { isActive: true, DPT: 'CSE', NAME: '计算机科学与工程系'},
-        { isActive: true, DPT: 'EEE', NAME: '电子与电气工程系'},
-        { isActive: true, DPT: 'ESE', NAME: '环境科学与工程学院'},
-        { isActive: true, DPT: 'ESS', NAME: '地球与空间科学系'},
+        { isActive: true, DPT: 'BIO', NAME: '生物系', HTML: 'http://bio.sustc.edu.cn/'},
+        { isActive: true, DPT: 'BME', NAME: '生物医学工程系', HTML: 'http://bme.sustech.edu.cn/'},
+        { isActive: true, DPT: 'CHEM', NAME: '化学系', HTML: 'http://chem.sustc.edu.cn/'},
+        { isActive: true, DPT: 'CSE', NAME: '计算机科学与工程系', HTML: 'http://cse.sustc.edu.cn/'},
+        { isActive: true, DPT: 'EEE', NAME: '电子与电气工程系', HTML: 'http://eee.sustc.edu.cn/'},
+        { isActive: true, DPT: 'ESE', NAME: '环境科学与工程学院', HTML: 'http://ese.sustc.edu.cn/'},
+        { isActive: true, DPT: 'ESS', NAME: '地球与空间科学系', HTML: 'http://ess.sustc.edu.cn/'},
       ],
       objects: [
-        { isActive: true, DPT: 'FIN', NAME: '金融系'},
-        { isActive: true, DPT: 'MAE', NAME: '力学与航空航天工程系'},
-        { isActive: true, DPT: 'MATH', NAME: '数学系'},
-        { isActive: true, DPT: 'MEDICAL', NAME: '医学院'},
-        { isActive: true, DPT: 'MEE', NAME: '机械与能源工程系'},
-        { isActive: true, DPT: 'MSE', NAME: '材料科学与工程系'},
-        { isActive: true, DPT: 'OCEAN', NAME: '海洋科学与工程系'},
-        { isActive: true, DPT: 'PHY', NAME: '物理系'},
+        { isActive: true, DPT: 'FIN', NAME: '金融系', HTML: 'http://fin.sustc.edu.cn/'},
+        { isActive: true, DPT: 'MAE', NAME: '力学与航空航天工程系', HTML: 'http://mae.sustc.edu.cn/'},
+        { isActive: true, DPT: 'MATH', NAME: '数学系', HTML: 'http://math.sustech.edu.cn/'},
+        { isActive: true, DPT: 'MEDICAL', NAME: '医学院', HTML: 'http://med.sustech.edu.cn/index.html'},
+        { isActive: true, DPT: 'MEE', NAME: '机械与能源工程系', HTML: 'http://mee.sustc.edu.cn/'},
+        { isActive: true, DPT: 'MSE', NAME: '材料科学与工程系', HTML: 'http://mse.sustc.edu.cn/'},
+        { isActive: true, DPT: 'OCEAN', NAME: '海洋科学与工程系', HTML: 'http://ocean.sustc.edu.cn/'},
+        { isActive: true, DPT: 'PHY', NAME: '物理系', HTML: 'http://phy.sustc.edu.cn/'},
       ]
 
     }
   },
   methods: {
-      sendString() {
-        Bus.$emit("mailString", this.searchString);
-      },
-      sendDep(department){
-        Bus.$emit("sendDep", department);
+      goto(html) {
+          console.log(html);
+          window.location.href = html;
       }
   }
 }

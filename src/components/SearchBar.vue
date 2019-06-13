@@ -155,6 +155,7 @@
             Bus.$on("select_year", year => {
                 this.year = year;
                 this.searchString = "";
+                this.department = "";
             });
             Bus.$on("read_over", flag => {
                 this.flag = flag;
@@ -169,7 +170,7 @@
                 console.log("搜索被点击");
             });
             Bus.$on("sendDep", department => {
-                this.department = adapter[department];
+                this.department = adapter[department.toUpperCase()];
                 console.log("部门被点击");
             });
         },
