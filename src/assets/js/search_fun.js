@@ -5,7 +5,7 @@ import Bus from "./Bus"
 let articles = [];
 let articles_array = [];
 
-// d3.json('http://10.21.91.207:8080/exer/lecture').then(function(data){
+// d3.json('http://10.21.91.207:8081/exer/lecture').then(function(data){
 //     data.forEach(function (d) {
 //         articles.push(d);
 //     });
